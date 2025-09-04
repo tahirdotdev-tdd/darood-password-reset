@@ -3,20 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <title>Darood App - Reset Password</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body style="background:#121212; color:#f5f5f5; font-family: Arial; text-align:center; padding:40px;">
-  <h2 style="color:#ff8800;">🔑 Reset your Password</h2>
-  <p>Click the link in the email again if this page doesn’t redirect you.</p>
-  
-  <script>
-    // Supabase will add `access_token` in URL
-    const url = new URL(window.location.href);
-    const token = url.searchParams.get("access_token");
 
-    if (token) {
-      // Ideally, redirect back to your app with token
-      window.location.href = "daroodapp://reset?token=" + token;
+  <h2 style="color:#ff8800;">🔑 Reset your Password</h2>
+  <p>Enter your new password below to continue.</p>
+
+  <input id="newPassword" type="password" placeholder="New Password"
+         style="padding:10px; border-radius:6px; border:none; width:80%; max-width:300px; margin:10px 0;">
+  <br>
+  <button onclick="resetPassword()" 
+          style="padding:10px 20px; border:none; border-radius:6px; background:#ff8800; color:#121212; font-weight:bold; cursor:pointer;">
+    ✅ Update Password
+  </button>
+
+  <p id="message" style="margin-top:20px; color:#ff8800;"></p>
+
+  <script>
+    // Initialize Supabase client (replace with your project details)
+    const supabaseUrl = "https://vdlzkjljamnrpdqtistw.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkbHpramxqYW1ucnBkcXRpc3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwOTQ4MDIsImV4cCI6MjA3MTY3MDgwMn0.dymWhgxEDLPuNO9atq5b7gQvQrZQiZxO8gejTsbIZ6I";
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function resetPassword() {
+      const newPassword = document.getElementById("newPassword").value;
+      const messageEl = document.getElementById("message");
+
+      if (!newPassword) {
+        messageEl.innerText = "⚠️ Please enter a new password.";
+        return;
+      }
+
+      // Update password via Supabase
+      const { data, error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+      if (error) {
+        messageEl.innerText = "❌ " + error.message;
+      } else {
+        messageEl.innerText = "✅ Password updated! You can now log in with your new password.";
+      }
     }
   </script>
+
 </body>
 </html>
