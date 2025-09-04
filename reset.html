@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Darood App - Reset Password</title>
+</head>
+<body style="background:#121212; color:#f5f5f5; font-family: Arial; text-align:center; padding:40px;">
+  <h2 style="color:#ff8800;">🔑 Reset your Password</h2>
+  <p>Click the link in the email again if this page doesn’t redirect you.</p>
+  
+  <script>
+    // Supabase will add `access_token` in URL
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("access_token");
+
+    if (token) {
+      // Ideally, redirect back to your app with token
+      window.location.href = "daroodapp://reset?token=" + token;
+    }
+  </script>
+</body>
+</html>
